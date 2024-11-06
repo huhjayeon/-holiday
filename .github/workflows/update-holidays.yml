@@ -26,7 +26,7 @@ jobs:
 
       - name: Fetch holiday data
         env:
-          API_KEY: K9Q4h6VOX0IvCFcutwNBcoNQSlOb3uM3  # API Key 설정
+          API_KEY: ${{ secrets.API_KEY }}  # GitHub Secrets에 저장된 API Key 사용
         run: python fetch_holidays.py
 
       - name: Commit and Push holiday data
@@ -37,4 +37,4 @@ jobs:
           git commit -m "Update holidays data"
           git push
         env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

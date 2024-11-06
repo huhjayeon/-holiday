@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 
 API_KEY = "K9Q4h6VOX0IvCFcutwNBcoNQSlOb3uM3"
-countries = ["US", "AE", "SA", "QA", "OM", "CA", "AU", "FR", "GB", "DE", "KW"]
+countries = ["US", "CA", "AU", "AE", "SA", "QA", "OM", "KW", "FR", "GB", "DE", "ES", "KR", "JP", "CN", "RU"]
 year = datetime.now().year
 holidays_data = {}
 

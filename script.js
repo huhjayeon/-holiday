@@ -1,7 +1,7 @@
-// 'Search' 버튼 클릭 시 공휴일 데이터를 로드
+// 검색 버튼 클릭 시 공휴일 데이터 로드
 document.getElementById("searchButton").addEventListener("click", loadHolidays);
 
-// 공휴일 데이터를 JSON 파일에서 가져와 필터에 맞게 렌더링
+// 공휴일 데이터를 불러와 필터를 적용하고 표시
 async function loadHolidays() {
     const country = document.getElementById("countrySelect").value;
     const year = document.getElementById("yearSelect").value;
@@ -14,47 +14,38 @@ async function loadHolidays() {
         return date.getFullYear() === parseInt(year) && (month === "all" || date.getMonth() + 1 === parseInt(month));
     });
 
-    renderCalendar(year, month, holidays);
+    displayHolidays(holidays);
 }
 
-// 달력을 렌더링하고 공휴일을 날짜별로 표시
-function renderCalendar(year, month, holidays) {
-    const calendarContainer = document.getElementById("calendarContainer");
-    calendarContainer.innerHTML = "";
+// 공휴일 정보를 텍스트 형식으로 화면에 표시
+function displayHolidays(holidays) {
+    const resultContainer = document.getElementById("resultContainer");
+    resultContainer.innerHTML = ""; // 이전 결과 초기화
 
-    const daysInMonth = new Date(year, month === "all" ? 12 : month, 0).getDate();
-    for (let day = 1; day <= daysInMonth; day++) {
-        const date = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const holiday = holidays.find(h => h.date.iso.startsWith(date));
-
-        const dayDiv = document.createElement("div");
-        dayDiv.className = "calendar-day";
-        dayDiv.innerText = day;
-
-        if (holiday) {
-            const nameDiv = document.createElement("div");
-            nameDiv.className = "holiday-name";
-            nameDiv.innerText = holiday.name;
-
-            const tooltipDiv = document.createElement("div");
-            tooltipDiv.className = "holiday-tooltip";
-            tooltipDiv.innerText = holiday.description;
-
-            dayDiv.appendChild(nameDiv);
-            dayDiv.appendChild(tooltipDiv);
-        }
-
-        calendarContainer.appendChild(dayDiv);
+    if (holidays.length === 0) {
+        resultContainer.innerHTML = "<p>해당 조건의 공휴일이 없습니다.</p>";
+        return;
     }
+
+    holidays.forEach(holiday => {
+        const holidayDiv = document.createElement("div");
+        holidayDiv.className = "holiday-item";
+        holidayDiv.innerHTML = `
+            <h3>${holiday.name}</h3>
+            <p><strong>Type:</strong> ${holiday.type}</p>
+            <p><strong>Description:</strong> ${holiday.description || "No description available."}</p>
+            <p><strong>Date:</strong> ${holiday.date.iso}</p>
+        `;
+        resultContainer.appendChild(holidayDiv);
+    });
 }
 
-// 필터 옵션을 동적으로 추가
+// 필터를 채우는 함수
 async function populateFilters() {
     const countrySelect = document.getElementById("countrySelect");
     const yearSelect = document.getElementById("yearSelect");
     const monthSelect = document.getElementById("monthSelect");
 
-    // 국가 목록 추가
     const countries = ["US", "AE", "SA", "QA", "OM", "CA", "AU", "FR", "GB", "DE", "KW"];
     countries.forEach(country => {
         const option = document.createElement("option");
@@ -63,7 +54,6 @@ async function populateFilters() {
         countrySelect.appendChild(option);
     });
 
-    // 연도 옵션 추가
     const currentYear = new Date().getFullYear();
     for (let year = currentYear - 5; year <= currentYear + 5; year++) {
         const option = document.createElement("option");
@@ -72,7 +62,6 @@ async function populateFilters() {
         yearSelect.appendChild(option);
     }
 
-    // 월 옵션 추가
     const months = ["All Month", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     months.forEach((month, index) => {
         const option = document.createElement("option");
@@ -81,17 +70,9 @@ async function populateFilters() {
         monthSelect.appendChild(option);
     });
 
-    // 기본 선택값 설정
     countrySelect.value = countries[0];
     yearSelect.value = currentYear;
     monthSelect.value = "all";
 }
 
-// 페이지 로드 시 필터 초기화
 document.addEventListener("DOMContentLoaded", populateFilters);
-
-// 검색 결과 표시 후 스크롤 조정
-document.getElementById("searchButton").addEventListener("click", () => {
-    const calendarContainer = document.getElementById("calendarContainer");
-    calendarContainer.scrollIntoView({ behavior: "smooth" });
-});

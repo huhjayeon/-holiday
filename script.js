@@ -1,3 +1,5 @@
+document.getElementById("searchButton").addEventListener("click", loadHolidays);
+
 async function loadHolidays() {
     const country = document.getElementById("countrySelect").value;
     const year = document.getElementById("yearSelect").value;
@@ -19,7 +21,7 @@ function renderCalendar(year, month, holidays) {
 
     const daysInMonth = new Date(year, month === "all" ? 12 : month, 0).getDate();
     for (let day = 1; day <= daysInMonth; day++) {
-        const date = `${year}-${month.padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const date = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const holiday = holidays.find(h => h.date.iso.startsWith(date));
 
         const dayDiv = document.createElement("div");
@@ -61,7 +63,8 @@ async function populateFilters() {
         option.value = year;
         option.text = year;
         yearSelect.appendChild(option);
-    }
+    }   
+
 
     // Default selection
     countrySelect.value = countries[0];

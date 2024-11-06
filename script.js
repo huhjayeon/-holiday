@@ -43,25 +43,29 @@ function renderCalendar(year, month, holidays) {
     }
 }
 
-function populateFilters() {
-    const countries = ["US", "AE", "SA", "QA", "OM", "CA", "AU", "FR", "GB", "DE", "KW"];
+async function populateFilters() {
     const countrySelect = document.getElementById("countrySelect");
+    const yearSelect = document.getElementById("yearSelect");
+
+    const countries = ["US", "AE", "SA", "QA", "OM", "CA", "AU", "FR", "GB", "DE", "KW"];
     countries.forEach(country => {
         const option = document.createElement("option");
         option.value = country;
         option.text = country;
-        countrySelect.add(option);
+        countrySelect.appendChild(option);
     });
 
-    const yearSelect = document.getElementById("yearSelect");
-    for (let year = 2020; year <= 2030; year++) {
+    const currentYear = new Date().getFullYear();
+    for (let year = currentYear - 5; year <= currentYear + 5; year++) {
         const option = document.createElement("option");
         option.value = year;
         option.text = year;
-        yearSelect.add(option);
+        yearSelect.appendChild(option);
     }
+
+    // Default selection
+    countrySelect.value = countries[0];
+    yearSelect.value = currentYear;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    populateFilters();
-});
+document.addEventListener("DOMContentLoaded", populateFilters);

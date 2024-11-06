@@ -62,6 +62,7 @@ async function populateFilters() {
         yearSelect.appendChild(option);
     }
 
+    // Month options
     const months = ["All Month", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     months.forEach((month, index) => {
         const option = document.createElement("option");

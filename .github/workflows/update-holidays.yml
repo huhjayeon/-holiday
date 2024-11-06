@@ -1,4 +1,4 @@
-#매일 자정에 휴일 데이터를 API에서 가져와 holidays.json 파일에 업데이트하도록 설정
+# 매일 자정에 휴일 데이터를 API에서 가져와 holidays.json 파일에 업데이트하도록 설정
 name: Update Holidays
 
 on:
@@ -20,7 +20,9 @@ jobs:
           python-version: '3.x'
 
       - name: Install requests library
-        run: pip install requests
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
 
       - name: Fetch holiday data
         env:
@@ -52,3 +54,5 @@ jobs:
           git add holidays.json
           git commit -m "Update holidays data"
           git push
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,54 @@
+#매일 자정에 휴일 데이터를 API에서 가져와 holidays.json 파일에 업데이트하도록 설정
+name: Update Holidays
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 매일 자정에 실행
+  workflow_dispatch:      # 수동 실행도 가능
+
+jobs:
+  update-holidays:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install requests library
+        run: pip install requests
+
+      - name: Fetch holiday data
+        env:
+          API_KEY: K9Q4h6VOX0IvCFcutwNBcoNQSlOb3uM3  # API Key 설정
+        run: |
+          import requests
+          import json
+          from datetime import datetime
+
+          countries = ["US", "AE", "SA", "QA", "OM", "CA", "AU", "FR", "GB", "DE", "KW"]
+          year = datetime.now().year
+          holidays_data = {}
+
+          for country in countries:
+              url = f"https://calendarific.com/api/v2/holidays?&api_key={API_KEY}&country={country}&year={year}"
+              response = requests.get(url)
+              if response.status_code == 200:
+                  holidays_data[country] = response.json()['response']['holidays']
+              else:
+                  print(f"Failed to fetch data for {country}. Status code: {response.status_code}")
+
+          with open('holidays.json', 'w') as f:
+              json.dump(holidays_data, f, indent=2)
+
+      - name: Commit and Push holiday data
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add holidays.json
+          git commit -m "Update holidays data"
+          git push

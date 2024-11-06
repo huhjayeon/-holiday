@@ -1,0 +1,25 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    background-color: #f4f4f9;
+}
+
+.container {
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.filters {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+#holidayList {
+    margin-top: 20px;
+    text-align: left;
+}

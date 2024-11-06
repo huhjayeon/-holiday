@@ -4,6 +4,7 @@ body {
     justify-content: center;
     align-items: center;
     margin: 0;
+    padding: 20px;
     background-color: #f4f4f9;
 }
 
@@ -13,13 +14,20 @@ body {
     text-align: center;
 }
 
-.filters {
+.filter-container, .filters {
     display: flex;
     justify-content: space-around;
     margin-bottom: 20px;
 }
 
-#holidayList {
+#holiday-results, #holidayList {
     margin-top: 20px;
     text-align: left;
+}
+
+.holiday-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
 }

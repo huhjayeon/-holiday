@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Days - Holiday Hub</title>
+    <title>Global Days - Holiday Hub</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,36 +12,14 @@
         <div class="filters">
             <select id="countrySelect"></select>
             <select id="yearSelect"></select>
-            <select id="monthSelect">
-                <option value="1">All Month</option>
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-            </select>
-            <button onclick="loadHolidays()">Search</button>
+            <select id="monthSelect"></select>
+            <button id="searchButton">Search</button>
         </div>
     </div>
     
     <div class="container">
-    <h1>HolidayHub</h1>
-    <div class="filters">
-        <select id="countrySelect"></select>
-        <select id="yearSelect"></select>
-        <select id="monthSelect"></select>
-        <button id="searchButton">Search</button>
+        <div id="resultContainer"></div>
     </div>
-        
-    <div id="resultContainer"></div>
-</div>
 
     <script src="script.js"></script>
 </body>

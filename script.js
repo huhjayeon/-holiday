@@ -69,3 +69,10 @@ async function populateFilters() {
 }
 
 document.addEventListener("DOMContentLoaded", populateFilters);
+
+document.getElementById("searchButton").addEventListener("click", () => {
+    // 검색 결과 표시 후 스크롤을 검색 필터 아래로 조정
+    const holidayList = document.getElementById("holidayList");
+    holidayList.scrollIntoView({ behavior: "smooth" });
+});
+

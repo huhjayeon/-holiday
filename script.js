@@ -27,7 +27,7 @@ function displayHolidays(holidays) {
     resultContainer.innerHTML = ""; // 이전 결과 초기화
 
     if (holidays.length === 0) {
-        resultContainer.innerHTML = "<p>해당 조건의 공휴일이 없습니다.</p>";
+        resultContainer.innerHTML = "<p>No holidays found for the selected criteria.</p>";
         return;
     }
 

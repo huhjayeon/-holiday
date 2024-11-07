@@ -63,7 +63,13 @@ async function populateFilters() {
     const yearSelect = document.getElementById("yearSelect");
     const monthSelect = document.getElementById("monthSelect");
 
-    const countries = ["US", "AE", "SA", "QA", "OM", "CA", "AU", "FR", "GB", "DE", "KW"];
+    // JSON 파일을 불러와서 필터 업데이트
+    const response = await fetch("holidays.json");
+    const data = await response.json();
+
+    // 국가 필터 업데이트
+    const countries = Object.keys(data);
+    countrySelect.innerHTML = "";
     countries.forEach(country => {
         const option = document.createElement("option");
         option.value = country;
@@ -71,29 +77,52 @@ async function populateFilters() {
         countrySelect.appendChild(option);
     });
 
-    const currentYear = new Date().getFullYear();
-    for (let year = currentYear - 5; year <= currentYear + 5; year++) {
+    // 연도 필터 업데이트
+    const yearsSet = new Set();
+    countries.forEach(country => {
+        data[country].forEach(holiday => {
+            const year = new Date(holiday.date.iso).getFullYear();
+            yearsSet.add(year);
+        });
+    });
+
+    yearSelect.innerHTML = "";
+    Array.from(yearsSet).sort().forEach(year => {
         const option = document.createElement("option");
         option.value = year;
         option.text = year;
         yearSelect.appendChild(option);
-    }
-
-    // Month options
-    const months = ["All Month", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    months.forEach((month, index) => {
-        const option = document.createElement("option");
-        option.value = index === 0 ? "all" : index;
-        option.text = month;
-        monthSelect.appendChild(option);
     });
 
-    countrySelect.value = countries[0];
-    yearSelect.value = currentYear;
-    monthSelect.value = "all";
+    // 월(month) 필터 업데이트
+    monthSelect.innerHTML = "";
+    const months = [
+        { value: "1", text: "January" },
+        { value: "2", text: "February" },
+        { value: "3", text: "March" },
+        { value: "4", text: "April" },
+        { value: "5", text: "May" },
+        { value: "6", text: "June" },
+        { value: "7", text: "July" },
+        { value: "8", text: "August" },
+        { value: "9", text: "September" },
+        { value: "10", text: "October" },
+        { value: "11", text: "November" },
+        { value: "12", text: "December" }
+    ];
+
+    months.forEach(month => {
+        const option = document.createElement("option");
+        option.value = month.value;
+        option.text = month.text;
+        monthSelect.appendChild(option);
+    });
 }
 
+// 페이지가 로드될 때 필터 업데이트
 document.addEventListener("DOMContentLoaded", populateFilters);
+
+
 
 // 스크롤 이벤트: 일정 스크롤 이상 내려가면 버튼 표시
 window.onscroll = function() {

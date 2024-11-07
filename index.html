@@ -10,9 +10,11 @@
     <div class="header">
         <h1>HolidayHub</h1>
         <div class="filters">
-            <select id="countrySelect"></select>
-            <select id="yearSelect"></select>
-            <select id="monthSelect"></select>
+            <div class="select-container">
+                <select id="countrySelect"></select>
+                <select id="yearSelect"></select>
+                <select id="monthSelect"></select>
+            </div>
             <button id="searchButton">Search</button>
         </div>
     </div>
@@ -20,6 +22,13 @@
     <div class="container">
         <div id="resultContainer"></div>
     </div>
+
+    <button id="topButton">Top</button>
+
+    <footer class="footer">
+        <p>&copy; 2024 Global Days. All rights reserved.</p>
+    </footer>
+    
 
     <script src="script.js"></script>
 </body>

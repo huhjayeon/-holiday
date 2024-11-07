@@ -15,8 +15,12 @@ async function loadHolidays() {
     });
 
     displayHolidays(holidays);
+
+    // 화면 맨 위로 스크롤 이동
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+// 공휴일 정보를 텍스트 형식으로 화면에 표시
 // 공휴일 정보를 텍스트 형식으로 화면에 표시
 function displayHolidays(holidays) {
     const resultContainer = document.getElementById("resultContainer");
@@ -27,18 +31,31 @@ function displayHolidays(holidays) {
         return;
     }
 
-    holidays.forEach(holiday => {
+    // 공휴일 이름과 날짜를 기준으로 중복 제거 및 타입 병합
+    const mergedHolidays = holidays.reduce((acc, holiday) => {
+        const key = `${holiday.name}-${holiday.date.iso}`;
+        if (!acc[key]) {
+            acc[key] = { ...holiday, type: [holiday.type] };
+        } else {
+            acc[key].type.push(holiday.type); // 기존 타입 배열에 추가
+        }
+        return acc;
+    }, {});
+
+    // 병합된 공휴일을 표시
+    Object.values(mergedHolidays).forEach(holiday => {
         const holidayDiv = document.createElement("div");
         holidayDiv.className = "holiday-item";
         holidayDiv.innerHTML = `
             <h3>${holiday.name}</h3>
-            <p><strong>Type:</strong> ${holiday.type}</p>
+            <p><strong>Type:</strong> ${holiday.type.join(", ")}</p>
             <p><strong>Description:</strong> ${holiday.description || "No description available."}</p>
             <p><strong>Date:</strong> ${holiday.date.iso}</p>
         `;
         resultContainer.appendChild(holidayDiv);
     });
 }
+
 
 // 필터를 채우는 함수
 async function populateFilters() {
@@ -77,3 +94,20 @@ async function populateFilters() {
 }
 
 document.addEventListener("DOMContentLoaded", populateFilters);
+
+// 스크롤 이벤트: 일정 스크롤 이상 내려가면 버튼 표시
+window.onscroll = function() {
+    const topButton = document.getElementById("topButton");
+    if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        topButton.style.display = "block";
+    } else {
+        topButton.style.display = "none";
+    }
+};
+
+// 버튼 클릭 시 페이지 맨 위로 이동 (topbutton)
+document.getElementById("topButton").onclick = function() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+

@@ -59,64 +59,74 @@ function displayHolidays(holidays) {
 
 // 필터를 채우는 함수
 async function populateFilters() {
-    const countrySelect = document.getElementById("countrySelect");
-    const yearSelect = document.getElementById("yearSelect");
-    const monthSelect = document.getElementById("monthSelect");
 
-    // JSON 파일을 불러와서 필터 업데이트
-    const response = await fetch("holidays.json");
-    const data = await response.json();
+    // 로딩 스피너 표시
+    document.getElementById("loadingSpinner").style.display = "block";
 
-    // 국가 필터 업데이트
-    const countries = Object.keys(data).sort();
-    countrySelect.innerHTML = "";
-    countries.forEach(country => {
-        const option = document.createElement("option");
-        option.value = country;
-        option.text = country;
-        countrySelect.appendChild(option);
-    });
+    try {
 
-    // 연도 필터 업데이트
-    const yearsSet = new Set();
-    countries.forEach(country => {
-        data[country].forEach(holiday => {
-            const year = new Date(holiday.date.iso).getFullYear();
-            yearsSet.add(year);
+        const countrySelect = document.getElementById("countrySelect");
+        const yearSelect = document.getElementById("yearSelect");
+        const monthSelect = document.getElementById("monthSelect");
+
+        // JSON 파일을 불러와서 필터 업데이트
+        const response = await fetch("holidays.json");
+        const data = await response.json();
+
+        // 국가 필터 업데이트
+        const countries = Object.keys(data).sort();
+        countrySelect.innerHTML = "";
+        countries.forEach(country => {
+            const option = document.createElement("option");
+            option.value = country;
+            option.text = country;
+            countrySelect.appendChild(option);
         });
-    });
 
-    yearSelect.innerHTML = "";
-    Array.from(yearsSet).sort().forEach(year => {
-        const option = document.createElement("option");
-        option.value = year;
-        option.text = year;
-        yearSelect.appendChild(option);
-    });
+        // 연도 필터 업데이트
+        const yearsSet = new Set();
+        countries.forEach(country => {
+            data[country].forEach(holiday => {
+                const year = new Date(holiday.date.iso).getFullYear();
+                yearsSet.add(year);
+            });
+        });
 
-    // 월(month) 필터 업데이트
-    monthSelect.innerHTML = "";
-    const months = [
-        { value: "1", text: "January" },
-        { value: "2", text: "February" },
-        { value: "3", text: "March" },
-        { value: "4", text: "April" },
-        { value: "5", text: "May" },
-        { value: "6", text: "June" },
-        { value: "7", text: "July" },
-        { value: "8", text: "August" },
-        { value: "9", text: "September" },
-        { value: "10", text: "October" },
-        { value: "11", text: "November" },
-        { value: "12", text: "December" }
-    ];
+        yearSelect.innerHTML = "";
+        Array.from(yearsSet).sort().forEach(year => {
+            const option = document.createElement("option");
+            option.value = year;
+            option.text = year;
+            yearSelect.appendChild(option);
+        });
 
-    months.forEach(month => {
-        const option = document.createElement("option");
-        option.value = month.value;
-        option.text = month.text;
-        monthSelect.appendChild(option);
-    });
+        // 월(month) 필터 업데이트
+        monthSelect.innerHTML = "";
+        const months = [
+            { value: "1", text: "January" },
+            { value: "2", text: "February" },
+            { value: "3", text: "March" },
+            { value: "4", text: "April" },
+            { value: "5", text: "May" },
+            { value: "6", text: "June" },
+            { value: "7", text: "July" },
+            { value: "8", text: "August" },
+            { value: "9", text: "September" },
+            { value: "10", text: "October" },
+            { value: "11", text: "November" },
+            { value: "12", text: "December" }
+        ];
+
+        months.forEach(month => {
+            const option = document.createElement("option");
+            option.value = month.value;
+            option.text = month.text;
+            monthSelect.appendChild(option);
+        });
+    } finally {
+        // 로딩 스피너 숨기기
+        document.getElementById("loadingSpinner").style.display = "none";
+    }
 }
 
 // 페이지가 로드될 때 필터 업데이트

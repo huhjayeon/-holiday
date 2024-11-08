@@ -20,7 +20,7 @@ async function loadHolidays() {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// 공휴일 정보를 텍스트 형식으로 화면에 표시
+
 // 공휴일 정보를 텍스트 형식으로 화면에 표시
 function displayHolidays(holidays) {
     const resultContainer = document.getElementById("resultContainer");
@@ -68,7 +68,7 @@ async function populateFilters() {
     const data = await response.json();
 
     // 국가 필터 업데이트
-    const countries = Object.keys(data);
+    const countries = Object.keys(data).sort();
     countrySelect.innerHTML = "";
     countries.forEach(country => {
         const option = document.createElement("option");

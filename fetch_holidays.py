@@ -13,6 +13,8 @@ def fetch_available_countries():
         return [country['iso-3166'] for country in countries_data]
     else:
         print("Failed to fetch country data")
+        print("Status Code:", response.status_code)
+        print("Response:", response.text)
         return []
 
 def fetch_available_years():
@@ -40,10 +42,15 @@ def fetch_holidays():
                 holidays_data[country] = holidays_data.get(country, []) + response.json()['response']['holidays']
             else:
                 print(f"Failed to fetch data for {country} in {year}")
+                print("Status Code:", response.status_code)
+                print("Response:", response.text)  # 오류 메시지 출력
 
     # JSON 파일로 저장
-    with open("holidays.json", "w") as f:
-        json.dump(holidays_data, f, indent=2)
+    if holidays_data:
+        with open("holidays.json", "w") as f:
+            json.dump(holidays_data, f, indent=2)
+    else:
+        print("No holiday data fetched.")
 
 if __name__ == "__main__":
     fetch_holidays()
